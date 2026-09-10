@@ -1,11 +1,16 @@
-const Loading = () => {
+import React from "react";
+
+const Loading = ({ className = "" }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white/90 dark:bg-black/90 backdrop-blur-sm z-50">
-      <div className="flex flex-col items-center p-8 rounded-2xl">
-        <span className="loading loading-spinner text-warning"></span>
-      </div>
+    <div
+      className={`flex items-center justify-center w-full min-h-[250px] py-12 ${className}`}
+      role="status"
+      aria-label="Loading"
+    >
+      <div className="w-10 h-10 rounded-full border-3 border-gray-200 dark:border-zinc-700 border-t-[#ff6347] animate-spin" />
     </div>
   );
 };
 
 export default Loading;
+

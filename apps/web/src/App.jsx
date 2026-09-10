@@ -3,21 +3,15 @@ import Navbar from "./Components/Navbar";
 import "./App.css";
 import Footer from "./Components/Footer";
 
-import { useEffect, useState } from "react";
-import Loading from "./Components/Loading";
+import { useEffect } from "react";
 import DarkModeSidebar from "./Components/DarkModeSidebar";
-import BackToTop from './Components/BackToTop';
+import BackToTop from "./Components/BackToTop";
 
 function App() {
-  const [loading, setLoading] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    setLoading(true);
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timeout);
+    window.scrollTo(0, 0);
   }, [location]);
 
   return (
@@ -25,8 +19,7 @@ function App() {
       <Navbar />
       <DarkModeSidebar />
       <BackToTop />
-      {loading ? <Loading /> : <Outlet />}
-
+      <Outlet />
       <Footer />
     </>
   );
