@@ -49,7 +49,7 @@ export default function HeroSection() {
             <>
               <Link
                 to="/fridge"
-                className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#ff6347] to-[#ffa500] hover:from-[#e55338] hover:to-[#ff8c00] text-white font-semibold shadow-lg shadow-[#ff6347]/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-base"
+                className="px-7 py-3.5 rounded-xl bg-[#ff6347] hover:bg-[#e5533d] dark:bg-[#ffa500] dark:hover:bg-[#cc8400] text-white dark:text-black font-semibold shadow-lg shadow-[#ff6347]/25 dark:shadow-[#ffa500]/20 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-base"
               >
                 <Refrigerator className="w-5 h-5" />
                 <span>Open Fridge</span>
@@ -67,7 +67,7 @@ export default function HeroSection() {
             <>
               <Link
                 to="/signup"
-                className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#ff6347] to-[#ffa500] hover:from-[#e55338] hover:to-[#ff8c00] text-white font-semibold shadow-lg shadow-[#ff6347]/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-base"
+                className="px-7 py-3.5 rounded-xl bg-[#ff6347] hover:bg-[#e5533d] dark:bg-[#ffa500] dark:hover:bg-[#cc8400] text-white dark:text-black font-semibold shadow-lg shadow-[#ff6347]/25 dark:shadow-[#ffa500]/20 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-base"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Get Started</span>

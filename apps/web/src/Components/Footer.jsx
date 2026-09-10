@@ -163,7 +163,7 @@ const Footer = () => {
                 <button
                   type="submit"
                   aria-label="Subscribe"
-                  className="p-2 rounded-lg bg-gradient-to-r from-[#ff6347] to-[#ffa500] hover:from-[#e55338] hover:to-[#ff8c00] text-white transition-transform active:scale-95 cursor-pointer shrink-0 shadow-sm"
+                  className="p-2 rounded-lg bg-[#ff6347] hover:bg-[#e5533d] dark:bg-[#ffa500] dark:hover:bg-[#cc8400] text-white dark:text-black transition-transform active:scale-95 cursor-pointer shrink-0 shadow-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
