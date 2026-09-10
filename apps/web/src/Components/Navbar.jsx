@@ -50,23 +50,25 @@ const Navbar = () => {
 
   const navItems = (
     <>
-      {["/", "/fridge", "/faq", "/about", "/contact"].map((path, i) => {
-        const labels = ["Home", "Fridge", "FAQ", "About", "Contact"];
-        return (
-          <li key={path}>
-            <NavLink
-              to={path}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-[#ff6347] dark:text-[#ffa500] font-semibold"
-                  : "hover:text-[#ff6347] dark:hover:text-[#ffa500] transition"
-              }
-            >
-              {labels[i]}
-            </NavLink>
-          </li>
-        );
-      })}
+      {[
+        { path: "/", label: "Home" },
+        { path: "/fridge", label: "Fridge" },
+        { path: "/about", label: "About" },
+        { path: "/contact", label: "Contact" },
+      ].map(({ path, label }) => (
+        <li key={path}>
+          <NavLink
+            to={path}
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#ff6347] dark:text-[#ffa500] font-semibold"
+                : "hover:text-[#ff6347] dark:hover:text-[#ffa500] transition"
+            }
+          >
+            {label}
+          </NavLink>
+        </li>
+      ))}
     </>
   );
 
