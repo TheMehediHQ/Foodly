@@ -24,28 +24,31 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="rounded-2xl px-4 py-16  transition-colors duration-500">
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-12 text-[#ff6347] dark:text-[#ffa500]">
+    <section className="w-full transition-colors duration-500">
+      <div className="text-center mb-10 sm:mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#ff6347] dark:text-[#ffa500]">
           Our Impact in Numbers
         </h2>
+        <p className="text-sm sm:text-base text-gray-600 dark:text-[#d1d5db] mt-3 max-w-2xl mx-auto font-normal">
+          Real measurements of how Foodly helps households cut waste and preserve freshness.
+        </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="bg-white dark:bg-zinc-800 shadow-[0_4px_20px_rgba(255,99,71,0.2)] dark:shadow-[0_4px_20px_rgba(255,165,0,0.2)] rounded-2xl p-8 flex flex-col items-center justify-center hover:scale-105 transition-transform"
-            >
-              <div className="mb-4">{stat.icon}</div>
-              <h3 className="text-4xl font-bold text-[#111827] dark:text-[#d1d5db]">
-                <CountUp end={stat.value} duration={2.5} suffix={stat.suffix} />
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white dark:bg-zinc-800 shadow-sm hover:shadow-md border border-gray-100 dark:border-zinc-700/60 rounded-2xl p-8 flex flex-col items-center justify-center hover:scale-[1.02] transition-all"
+          >
+            <div className="mb-4">{stat.icon}</div>
+            <h3 className="text-3xl sm:text-4xl font-bold text-[#111827] dark:text-[#d1d5db]">
+              <CountUp end={stat.value} duration={2.5} suffix={stat.suffix} />
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 font-medium">
+              {stat.label}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

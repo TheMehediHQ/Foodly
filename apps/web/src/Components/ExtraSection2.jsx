@@ -69,12 +69,12 @@ const itemVariants = {
 
 const ExtraSection2 = () => {
   return (
-    <section className="  rounded-2xl px-4 py-14  transition-colors duration-300">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#ff6347] dark:text-[#ffa500]">
+    <section className="w-full transition-colors duration-300">
+      <div className="text-center mb-10 sm:mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#ff6347] dark:text-[#ffa500]">
           Understanding Food Waste: Facts & Statistics
         </h2>
-        <p className="text-sm text-gray-500 dark:text-[#d1d5db] mt-3 max-w-xl mx-auto font-medium">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-[#d1d5db] mt-3 max-w-2xl mx-auto font-normal">
           Every action to reduce food waste contributes to a healthier planet and future.
         </p>
       </div>
