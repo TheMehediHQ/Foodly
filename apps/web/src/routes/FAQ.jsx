@@ -1,132 +1,266 @@
-import React, { useState } from "react";
-import { FiPlus, FiMinus } from "react-icons/fi";
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import {
+  Sparkles,
+  Search,
+  ChevronDown,
+  X,
+  MessageSquare,
+  Refrigerator,
+  ArrowRight,
+} from "lucide-react";
 
 const faqData = [
   {
-    question: "What is the purpose of this Food Management App?",
+    category: "Getting Started",
+    question: "What is the purpose of the Foodly app?",
     answer:
-      "This app helps you keep track of your food items, monitor their expiry dates, and manage notes related to each item. It supports adding, updating, and deleting food entries, so you never waste food or forget important details.",
+      "Foodly helps households reduce food waste and save money. By tracking expiry dates in real time, managing quantities, and organizing items into categories, you'll always know what to eat before it goes bad.",
   },
   {
-    question: "How do I add a new food item?",
+    category: "Food Tracking",
+    question: "How do I add a new food item to my fridge?",
     answer:
-      "Currently, food items are added via the backend or a dedicated form page. Each food entry includes title, category, quantity, expiry date, description, and an optional image.",
+      "Once logged in, click '+ Add Item' from your Fridge or navigate to the Add Food page. Enter the item's title, category (Dairy, Meat, Vegetables, Snacks), quantity, expiry date, and an optional image URL.",
   },
   {
+    category: "Food Tracking",
     question: "How can I update or delete my food items?",
     answer:
-      "You can update or delete food items you’ve added by navigating to the My Food Items section. Click the Update button to edit details or the Delete button to remove an item permanently. Changes reflect immediately without needing to refresh.",
+      "You can manage any food item you added from the Food Details page. Click 'Update' to edit details or 'Delete' to permanently remove an item. Changes reflect immediately across your dashboard.",
   },
   {
-    question: "Can I add notes to my food items?",
+    category: "Food Tracking",
+    question: "How does Foodly detect expired food?",
     answer:
-      "Yes! You can add personal notes to each food item you own from the food details page. This is useful for reminders, storage tips, or any other relevant info.",
+      "Foodly continuously calculates the difference between today's date and the item's expiration date. Items are visually badged with real-time freshness statuses such as 'Expires Today', 'X days left', or 'Expired' in red.",
   },
   {
-    question: "Who can add notes to a food item?",
+    category: "Food Tracking",
+    question: "Can I filter or sort my food inventory?",
     answer:
-      "Only the user who added the food item can add notes to it. Other users can view the notes but cannot edit or add new ones.",
+      "Yes! On the Fridge page, you can search foods by name, filter by categories (Dairy, Meat, Vegetables, Snacks), and sort by expiry date (Soonest First or Furthest First) or alphabetically (A–Z).",
   },
   {
-    question: "What happens if a food item has expired?",
+    category: "Food Tracking",
+    question: "Can I add personal notes to food items?",
     answer:
-      "The app automatically detects expired items based on the expiry date. Expired items are marked clearly in the UI with a red 'Expired' badge. The countdown timer shows remaining time until expiry for valid items.",
+      "Yes. You can add personal notes to any food item you own from the Food Details page. This is ideal for storage tips, leftover recipes, or reminder details.",
   },
   {
-    question: "How does the app handle user authentication?",
+    category: "Account & Security",
+    question: "How does user authentication work?",
     answer:
-      "The app uses Firebase Authentication to manage user login. You need to sign in to add, update, or delete your food items and add notes.",
+      "Foodly uses secure Firebase Authentication. You can sign up with your email and password to safely store, track, and personalize your food inventory across devices.",
   },
   {
-    question: "Is the app responsive?",
+    category: "Account & Security",
+    question: "Are my food items and personal notes private?",
     answer:
-      "Yes! The app is designed to be fully responsive, showing a table layout on desktop and a card-based layout on mobile devices for better usability.",
+      "Food items and notes are associated with your unique account. While inventory can be explored, only you have permission to edit, update, or delete your own food items.",
   },
   {
-    question: "Are my food item details private?",
+    category: "Getting Started",
+    question: "What happens if a food image URL fails to load?",
     answer:
-      "Food items are associated with the user who created them. Only you can update or delete your items and add notes to them. Others cannot modify your data.",
+      "If an image URL is broken or missing, Foodly automatically falls back to a clean, high-resolution placeholder image so your inventory always looks pristine.",
   },
   {
-    question: "What if the food image fails to load?",
+    category: "Getting Started",
+    question: "Is Foodly optimized for mobile devices?",
     answer:
-      "If the image URL is broken or missing, a default placeholder image will be shown instead to maintain a clean UI.",
-  },
-  {
-    question: "How often does the app check for expired food?",
-    answer:
-      "Expiry status is checked in real-time each time you load or refresh the food details. The countdown timer continuously updates to show accurate remaining time.",
-  },
-  {
-    question: "Can I filter or sort the food list?",
-    answer:
-      "Yes, the food list can be filtered by category and searched by title. Sorting options include expiry date (newest or oldest first) and alphabetical order by title.",
+      "Yes! Foodly is fully responsive. It provides an intuitive, high-performance interface that feels like a native app on mobile, tablet, and desktop screens.",
   },
 ];
 
+const categories = ["All", "Getting Started", "Food Tracking", "Account & Security"];
+
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const toggle = (index) => {
+  const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  const filteredFaqs = useMemo(() => {
+    return faqData.filter((item) => {
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory;
+      const matchesSearch =
+        item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.answer.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchTerm]);
+
   return (
-    <section
-      className="w-full min-h-screen  transition-colors duration-500 py-16 px-6 flex justify-center"
-      aria-label="Frequently Asked Questions"
-    >
-      <div className="max-w-4xl w-full">
-        <h2 className="text-5xl font-extrabold mb-12 text-center text-[#ff6347] dark:text-[#ffa500] tracking-wide">
-          Frequently Asked Questions
-        </h2>
+    <div className="min-h-screen bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-800 dark:text-zinc-100 transition-colors duration-300 pt-24 sm:pt-28 pb-16 sm:pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100/80 dark:bg-zinc-800 text-[#ff6347] dark:text-[#ffa500] border border-orange-200/60 dark:border-zinc-700 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Help & FAQ</span>
+          </div>
 
-        <div className="space-y-5">
-          {faqData.map((item, index) => {
-            const isActive = index === activeIndex;
-            return (
-              <div
-                key={index}
-                className={`group bg-white dark:bg-[#1e1e1e] rounded-xl shadow-lg dark:shadow-xl border border-transparent hover:border-[#ff6347] dark:hover:border-[#ffa500] transition-all duration-300 overflow-hidden`}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
+            Frequently Asked{" "}
+            <span className="text-[#ff6347] dark:text-[#ffa500]">Questions</span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-gray-600 dark:text-zinc-400 leading-relaxed">
+            Have questions about how Foodly works? Find answers on food tracking, expiry alerts, and
+            kitchen management below.
+          </p>
+        </div>
+
+        {/* Search & Category Filter Controls */}
+        <div className="max-w-2xl mx-auto space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-zinc-500">
+              <Search className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search questions or keywords..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 rounded-xl border border-orange-200/80 dark:border-zinc-700 bg-[#fffaf5] dark:bg-zinc-800/80 text-gray-900 dark:text-zinc-100 placeholder-gray-400 dark:placeholder-zinc-500 text-sm focus:outline-none focus:border-[#ff6347] dark:focus:border-[#ffa500] focus:ring-2 focus:ring-[#ff6347]/20 transition-all shadow-xs"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-zinc-200 cursor-pointer"
               >
-                <button
-                  onClick={() => toggle(index)}
-                  aria-expanded={isActive}
-                  aria-controls={`faq-panel-${index}`}
-                  id={`faq-header-${index}`}
-                  className="w-full flex justify-between items-center p-6 focus:outline-none"
-                >
-                  <span
-                    className={`text-xl font-semibold text-[#111827] dark:text-[#ddd] transition-colors duration-300`}
-                  >
-                    {item.question}
-                  </span>
-                  <span
-                    className={`flex items-center justify-center w-8 h-8 rounded-full border border-[#ff6347] dark:border-[#ffa500] text-[#ff6347] dark:text-[#ffa500] group-hover:bg-[#ff6347] group-hover:text-white dark:group-hover:bg-[#ffa500] dark:group-hover:text-black transition-transform duration-300 ${
-                      isActive ? "rotate-45" : ""
-                    }`}
-                  >
-                    {isActive ? <FiMinus size={20} /> : <FiPlus size={20} />}
-                  </span>
-                </button>
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
 
-                <div
-                  id={`faq-panel-${index}`}
-                  role="region"
-                  aria-labelledby={`faq-header-${index}`}
-                  className={`px-6 pb-6 text-[#444] dark:text-[#ccc] max-h-0 overflow-hidden transition-all duration-500 ${
-                    isActive ? "max-h-[500px] mt-0" : "mt-0"
+          {/* Category Pills */}
+          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-1 scrollbar-none flex-wrap">
+            {categories.map((cat) => {
+              const active = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    active
+                      ? "bg-[#ff6347] dark:bg-[#ffa500] text-white dark:text-black shadow-xs"
+                      : "bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-700 dark:text-zinc-300 hover:text-[#ff6347] dark:hover:text-[#ffa500] hover:bg-orange-100/50 dark:hover:bg-zinc-800 border border-orange-200/80 dark:border-zinc-700"
                   }`}
-                  style={{ transitionProperty: "max-height, margin-top" }}
                 >
-                  <p className="leading-relaxed">{item.answer}</p>
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Accordion List */}
+        <div className="max-w-3xl mx-auto space-y-3.5">
+          {filteredFaqs.length === 0 ? (
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-orange-200/60 dark:border-zinc-800 p-10 text-center space-y-3">
+              <p className="text-base font-semibold text-gray-900 dark:text-white">
+                No matching questions found
+              </p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400">
+                Try searching for another keyword or reset your active filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedCategory("All");
+                }}
+                className="mt-2 px-4 py-2 rounded-xl text-xs font-semibold border border-[#ff6347] text-[#ff6347] hover:bg-[#ff6347] hover:text-white dark:border-[#ffa500] dark:text-[#ffa500] dark:hover:bg-[#ffa500] dark:hover:text-black transition-colors cursor-pointer"
+              >
+                Reset Search
+              </button>
+            </div>
+          ) : (
+            filteredFaqs.map((item, index) => {
+              const isOpen = activeIndex === index;
+              return (
+                <div
+                  key={index}
+                  className={`bg-white dark:bg-zinc-900 rounded-2xl border transition-all duration-200 shadow-xs ${
+                    isOpen
+                      ? "border-orange-300 dark:border-zinc-700 ring-1 ring-orange-200/60 dark:ring-zinc-800"
+                      : "border-orange-200/60 dark:border-zinc-800 hover:border-orange-300/80 dark:hover:border-zinc-700"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordion(index)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${index}`}
+                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer gap-4"
+                  >
+                    <span className="text-sm sm:text-base font-bold text-gray-900 dark:text-zinc-100">
+                      {item.question}
+                    </span>
+                    <span
+                      className={`w-7 h-7 rounded-lg bg-orange-100/60 dark:bg-zinc-800 flex items-center justify-center text-[#ff6347] dark:text-[#ffa500] shrink-0 transition-transform duration-200 ${
+                        isOpen ? "rotate-180 bg-orange-200/70 dark:bg-zinc-700" : ""
+                      }`}
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </span>
+                  </button>
+
+                  {isOpen && (
+                    <div
+                      id={`faq-answer-${index}`}
+                      className="px-5 pb-5 sm:px-6 sm:pb-6 pt-0 text-xs sm:text-sm text-gray-600 dark:text-zinc-300 leading-relaxed border-t border-gray-100 dark:border-zinc-800/80 mt-1"
+                    >
+                      <p className="pt-3">{item.answer}</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
+        </div>
+
+        {/* Bottom CTA Banner */}
+        <div className="max-w-3xl mx-auto text-center p-8 sm:p-10 rounded-3xl bg-white dark:bg-zinc-900 border border-orange-200/60 dark:border-zinc-800 shadow-xs space-y-4">
+          <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-zinc-800 text-[#ff6347] dark:text-[#ffa500] flex items-center justify-center mx-auto">
+            <MessageSquare className="w-5 h-5" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+            Still have questions?
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-md mx-auto">
+            Can’t find the answer you’re looking for? Our team is always here to help you get the most
+            out of Foodly.
+          </p>
+
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/contact"
+              className="px-6 py-3 rounded-xl bg-[#ff6347] hover:bg-[#e5533d] dark:bg-[#ffa500] dark:hover:bg-[#cc8400] text-white dark:text-black font-semibold text-sm shadow-sm transition-all flex items-center gap-2 active:scale-95"
+            >
+              <span>Contact Support</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/fridge"
+              className="px-6 py-3 rounded-xl border border-[#ff6347] text-[#ff6347] hover:bg-[#ff6347] hover:text-white dark:border-[#ffa500] dark:text-[#ffa500] dark:hover:bg-[#ffa500] dark:hover:text-black font-semibold text-sm transition-colors flex items-center gap-2"
+            >
+              <Refrigerator className="w-4 h-4" />
+              <span>Explore Fridge</span>
+            </Link>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
