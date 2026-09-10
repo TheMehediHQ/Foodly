@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosSecure from "../api/axios";
 import Swal from "sweetalert2";
 import Loading from "../Components/Loading";
 
 const FridgePage = () => {
+  const [searchParams] = useSearchParams();
   const [foods, setFoods] = useState([]);
-  const [category, setCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState(() => searchParams.get("category") || "All");
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get("search") || "");
   const [sortBy, setSortBy] = useState("newest");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    const urlSearch = searchParams.get("search");
+    if (urlCategory) setCategory(urlCategory);
+    if (urlSearch !== null && urlSearch !== undefined) setSearchTerm(urlSearch);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchFoods = async () => {
