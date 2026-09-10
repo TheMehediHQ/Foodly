@@ -175,10 +175,10 @@ const FridgePage = () => {
   }, [foods]);
 
   return (
-    <div className="min-h-screen bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-800 dark:text-zinc-200 transition-colors duration-300 py-10 sm:py-14">
+    <div className="min-h-screen bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-800 dark:text-zinc-100 transition-colors duration-300 pt-24 sm:pt-28 pb-16 sm:pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-orange-200/60 dark:border-zinc-800 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 sm:pb-8 border-b border-orange-200/60 dark:border-zinc-800 mb-8 sm:mb-10">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-zinc-800 text-[#ff6347] dark:text-[#ffa500] text-xs font-semibold uppercase tracking-wider mb-3">
               <Refrigerator className="w-3.5 h-3.5" />
@@ -221,7 +221,7 @@ const FridgePage = () => {
         </div>
 
         {/* Filter Panel / Search Bar Section */}
-        <div className="mb-10 space-y-4">
+        <div className="mb-8 sm:mb-10 space-y-4">
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
             {/* Search Input */}
             <div className="relative flex-1">

@@ -54,11 +54,11 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-800 dark:text-zinc-100 transition-colors duration-300 pt-28 pb-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-start">
+    <div className="min-h-screen bg-[#fffaf5] dark:bg-[#1f1f1f] text-gray-800 dark:text-zinc-100 transition-colors duration-300 pt-24 sm:pt-28 pb-16 sm:pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* Left: Contact Info */}
-          <div className="md:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100/80 dark:bg-zinc-800 text-[#ff6347] dark:text-[#ffa500] border border-orange-200/60 dark:border-zinc-700 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -112,7 +112,7 @@ const Contact = () => {
           </div>
 
           {/* Right: Clean Contact Form */}
-          <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-2xl border border-orange-200/60 dark:border-zinc-800 p-6 sm:p-8 shadow-xs">
+          <div className="lg:col-span-7 bg-white dark:bg-zinc-900 rounded-3xl border border-orange-200/60 dark:border-zinc-800 p-6 sm:p-8 lg:p-10 shadow-xs">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
               Send a Message
             </h2>
