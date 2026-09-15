@@ -127,18 +127,13 @@ const SidebarContent = ({ collapsed, onClose }) => {
         ))}
       </nav>
 
-      {/* ── Bottom: dark mode + user card ── */}
-      <div className="shrink-0 border-t border-[#f0e8e2] dark:border-[#252525] p-3 space-y-2">
-        {/* Dark mode toggle */}
-        <div className={`flex ${collapsed ? "justify-center" : "px-1"}`}>
-          <Switch />
-        </div>
-
-        {/* User card — only when expanded */}
-        {!collapsed && user && (
+      {/* ── Bottom: user card ── */}
+      <div className="shrink-0 border-t border-[#f0e8e2] dark:border-[#252525] p-3">
+        {!collapsed && user ? (
           <Link
             to="/dashboard/user-profile"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#ff6347]/8 dark:hover:bg-[#ffa500]/8 transition group"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#ff6347]/10 dark:hover:bg-[#ffa500]/10 transition group"
+            onClick={onClose}
           >
             <img
               src={user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png"}
@@ -155,21 +150,21 @@ const SidebarContent = ({ collapsed, onClose }) => {
             </div>
             <MdChevronRight size={16} className="text-[#d1d5db] dark:text-[#4b5563] group-hover:text-[#ff6347] dark:group-hover:text-[#ffa500] transition-colors shrink-0" />
           </Link>
-        )}
-
-        {/* Collapsed user avatar */}
-        {collapsed && user && (
-          <Link
-            to="/dashboard/user-profile"
-            title="Profile"
-            className="flex justify-center"
-          >
-            <img
-              src={user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png"}
-              alt="avatar"
-              className="w-8 h-8 rounded-full border-2 border-[#ff6347] dark:border-[#ffa500] object-cover hover:opacity-80 transition"
-            />
-          </Link>
+        ) : (
+          user && (
+            <Link
+              to="/dashboard/user-profile"
+              title="Profile"
+              className="flex justify-center"
+              onClick={onClose}
+            >
+              <img
+                src={user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png"}
+                alt="avatar"
+                className="w-8 h-8 rounded-full border-2 border-[#ff6347] dark:border-[#ffa500] object-cover hover:opacity-80 transition"
+              />
+            </Link>
+          )
         )}
       </div>
     </div>
@@ -271,23 +266,27 @@ const DashboardLayout = () => {
             </div>
           </div>
 
-          {/* Right: avatar → profile */}
-          <Link
-            to="/dashboard/user-profile"
-            className="flex items-center gap-2.5 hover:opacity-80 transition shrink-0"
-          >
-            <img
-              src={user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png"}
-              alt="avatar"
-              className="w-8 h-8 rounded-full border-2 border-[#ff6347] dark:border-[#ffa500] object-cover"
-            />
-            <div className="hidden md:block text-right">
-              <p className="text-xs font-semibold text-[#111827] dark:text-[#e5e7eb] leading-tight">
-                {user?.displayName?.split(" ")[0] || "User"}
-              </p>
-              <p className="text-[10px] text-[#9ca3af] dark:text-[#6b7280]">View profile</p>
-            </div>
-          </Link>
+          {/* Right: theme toggle + avatar → profile */}
+          <div className="flex items-center gap-3 shrink-0">
+            <Switch />
+            <div className="h-5 w-px bg-[#f0e8e2] dark:bg-[#252525]" />
+            <Link
+              to="/dashboard/user-profile"
+              className="flex items-center gap-2.5 hover:opacity-80 transition shrink-0"
+            >
+              <img
+                src={user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png"}
+                alt="avatar"
+                className="w-8 h-8 rounded-full border-2 border-[#ff6347] dark:border-[#ffa500] object-cover"
+              />
+              <div className="hidden md:block text-right">
+                <p className="text-xs font-semibold text-[#111827] dark:text-[#e5e7eb] leading-tight">
+                  {user?.displayName?.split(" ")[0] || "User"}
+                </p>
+                <p className="text-[10px] text-[#9ca3af] dark:text-[#6b7280]">View profile</p>
+              </div>
+            </Link>
+          </div>
         </header>
 
         {/* ── Page content ── */}
