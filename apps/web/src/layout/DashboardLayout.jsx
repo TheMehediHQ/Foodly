@@ -6,14 +6,14 @@ import {
   MdOutlineAddBox,
   MdOutlineInventory,
   MdOutlinePerson,
+  MdOutlineAdminPanelSettings,
   MdHome,
   MdMenu,
   MdClose,
   MdChevronLeft,
   MdChevronRight,
 } from "react-icons/md";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../context/firebase/firebase.config";
+import { useAuth } from "../context/Provider/AuthProvider";
 import Switch from "../Components/DarkModeSidebar";
 import navLogo from "../assets/nav-logo.png";
 
@@ -66,7 +66,7 @@ const NavItem = ({ to, label, icon: Icon, end, collapsed, onClick }) => (
 // ── SidebarContent ────────────────────────────────────────────────────────────
 
 const SidebarContent = ({ collapsed, onClose }) => {
-  const [user] = useAuthState(auth);
+  const { user, isAdmin } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -86,14 +86,14 @@ const SidebarContent = ({ collapsed, onClose }) => {
             <img
               src="/icon.png"
               alt="Foodly"
-              className="w-8 h-8 rounded-lg object-cover"
+              className="w-8 h-8 rounded-lg object-contain shrink-0 hover:scale-105 transition-transform"
             />
           ) : (
-            /* Expanded: full horizontal logo */
+            /* Expanded: full horizontal brand logo */
             <img
               src={navLogo}
               alt="Foodly"
-              className="h-9 w-auto object-contain select-none"
+              className="h-8 w-auto max-w-[140px] object-contain shrink-0"
             />
           )}
         </Link>
@@ -125,6 +125,26 @@ const SidebarContent = ({ collapsed, onClose }) => {
         {mainNav.map((item) => (
           <NavItem key={item.to} {...item} collapsed={collapsed} onClick={onClose} />
         ))}
+
+        {/* Admin Navigation */}
+        {isAdmin && (
+          <>
+            {!collapsed ? (
+              <p className="px-3 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-[#ff6347] dark:text-[#ffa500]">
+                Administration
+              </p>
+            ) : (
+              <div className="my-3 mx-2 h-px bg-[#ff6347]/20 dark:bg-[#ffa500]/20" />
+            )}
+            <NavItem
+              to="/dashboard/admin"
+              label="Admin Panel"
+              icon={MdOutlineAdminPanelSettings}
+              collapsed={collapsed}
+              onClick={onClose}
+            />
+          </>
+        )}
       </nav>
 
       {/* ── Bottom: user card ── */}
@@ -176,7 +196,7 @@ const SidebarContent = ({ collapsed, onClose }) => {
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
 
   const getGreeting = () => {
     const h = new Date().getHours();

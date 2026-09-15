@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from 'react';
-import app from '../firebase/firebase.config';
+import React, { createContext, useEffect, useState, useCallback } from "react";
+import app from "../firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -8,18 +8,43 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
-import axiosSecure from '../../api/axios';
+import axiosSecure from "../../api/axios";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [roleLoading, setRoleLoading] = useState(true);
   const provider = new GoogleAuthProvider();
+
+  const fetchRole = useCallback(async (currentUser) => {
+    if (!currentUser) {
+      setRole(null);
+      setRoleLoading(false);
+      return;
+    }
+
+    setRoleLoading(true);
+    try {
+      const res = await axiosSecure.get("/users/me");
+      if (res.data?.ok && res.data?.data?.role) {
+        setRole(res.data.data.role);
+      } else {
+        setRole("user");
+      }
+    } catch {
+      // Default to user role if unable to fetch
+      setRole("user");
+    } finally {
+      setRoleLoading(false);
+    }
+  }, []);
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -42,54 +67,42 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     await signOut(auth);
-    await axiosSecure.post('/logout');
+    try {
+      await axiosSecure.post("/logout");
+    } catch {
+      // silent
+    }
     setUser(null);
+    setRole(null);
+    setRoleLoading(false);
     setLoading(false);
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        axiosSecure.post('/jwt', { email: currentUser.email })
-          .then(res => {
-            if (res.data.ok) {
-              console.log('Token issued');
-            }
-          })
-          .catch(err => console.error(err));
+        await fetchRole(currentUser);
       } else {
-        axiosSecure.post('/logout')
-          .then(res => {
-            if (res.data.ok) {
-              console.log('Token cleared');
-            }
-          })
-          .catch(err => console.error(err));
+        setRole(null);
+        setRoleLoading(false);
       }
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
-
-  // Add a response interceptor
-  axiosSecure.interceptors.response.use(
-    response => response,
-    async error => {
-      if (error.response && error.response.status === 401) {
-        await logout();
-      }
-      return Promise.reject(error);
-    }
-  );
+  }, [fetchRole]);
 
   const authData = {
     user,
     setUser,
+    role,
+    isAdmin: role === "admin",
+    roleLoading,
+    refetchRole: () => fetchRole(user),
     createUser,
     logout,
     loginUser,
-    loading,
+    loading: loading || roleLoading,
     setLoading,
     profile,
     createUserWithLoginGoogle,

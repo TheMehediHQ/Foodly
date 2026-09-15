@@ -13,6 +13,7 @@ import UpdateFood from "./pages/UpdateFood";
 // Context & Routes
 import AuthProvider from "./context/Provider/AuthProvider";
 import PrivateRoute from "./routes/PrivateRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 // Feature pages
 import MyFoods from "./routes/MyFoods";
@@ -21,6 +22,7 @@ import FoodDetailsPage from "./routes/FoodDetailsPage";
 import Profile from "./routes/Profile";
 import FridgePage from "./routes/FridgePage";
 import Overview from "./pages/dashboard/Overview";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import DashboardLayout from "./layout/DashboardLayout";
 import AllFoods from "./routes/AllFoods";
 import Contact from "./routes/Contact";
@@ -113,6 +115,14 @@ const router = createBrowserRouter([
       { path: "add-food", element: <AddFoodPage /> },
       { path: "my-foods", element: <MyFoods /> },
       { path: "user-profile", element: <Profile /> },
+      {
+        path: "admin",
+        element: (
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        ),
+      },
       {
         path: "food-details/:id",
         element: (

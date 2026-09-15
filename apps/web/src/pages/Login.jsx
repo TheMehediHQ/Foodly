@@ -39,10 +39,21 @@ const Login = () => {
       });
       navigate("/");
     } catch (err) {
+      let message = err.message;
+      if (
+        err.code === "auth/invalid-credential" ||
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/wrong-password"
+      ) {
+        message =
+          "Invalid email or password. If you have not created this account yet, please Sign Up first at /signup.";
+      } else if (err.code === "auth/too-many-requests") {
+        message = "Too many failed attempts. Please reset your password or try again later.";
+      }
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: err.message,
+        text: message,
       });
     }
   };
