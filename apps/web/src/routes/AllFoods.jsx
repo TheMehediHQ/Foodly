@@ -262,7 +262,7 @@ const AllFoods = () => {
   }, [foods]);
 
   return (
-    <div className="px-4 py-6 lg:px-8 lg:py-8 max-w-7xl mx-auto space-y-6">
+    <div className="px-4 py-6 lg:px-8 lg:py-8 max-w-6xl mx-auto space-y-6">
 
       {/* ── Page header ── */}
       <Motion.div
