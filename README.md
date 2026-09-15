@@ -335,6 +335,13 @@ without a valid Bearer token receive `401 Unauthorized`.
 
 ## Authentication
 
+### Demo / Test Accounts
+
+| Email | Password |
+| ----- | -------- |
+| `test@mehedi-hasan.me` | `Mehedi@123` |
+| `admin@mehedi-hasan.me` | `Mehedi@123` |
+
 - **Web (client):** Firebase Authentication — users can sign up / sign in with
   email & password, or via Google (`signInWithPopup`).
 - **API (server):** a stateless JWT signed with `JWT_SECRET` (2-hour expiry). On
