@@ -9,7 +9,7 @@
     "start": "bun index.js",
     "build": "node --check index.js",
     "lint": "eslint .",
-    "test": "bun --test",
+    "test": "bun test",
     "clean": "rm -rf dist"
   },
   "engines": {

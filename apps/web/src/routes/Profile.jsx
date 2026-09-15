@@ -152,8 +152,7 @@ const Profile = () => {
     (profileItems.filter((i) => i.done).length / profileItems.length) * 100
   );
 
-  // current preview URL — show typed URL if non-empty, else current photoURL
-  const previewURL = photoURL || user?.photoURL || "https://i.ibb.co/5r5C1fJ/user.png";
+  // auth loading check
 
   if (authLoading) {
     return (

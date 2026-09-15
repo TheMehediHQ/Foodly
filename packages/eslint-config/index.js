@@ -37,16 +37,28 @@ export default function foodlyConfig(opts = {}) {
       languageOptions: {
         ecmaVersion: 2022,
         sourceType: node ? "commonjs" : "module",
-        ecmaFeatures: { jsx },
+        parserOptions: {
+          ecmaFeatures: { jsx },
+        },
         globals: envGlobals,
       },
       rules: {
         ...js.configs.recommended.rules,
         "no-unused-vars": [
           "error",
-          { varsIgnorePattern: "^[A-Z_]", argsIgnorePattern: "^_" },
+          {
+            varsIgnorePattern: "^[A-Z_]",
+            argsIgnorePattern: "^[A-Z_]",
+            ignoreRestSiblings: true,
+          },
         ],
         "no-console": node ? "off" : "warn",
+      },
+    },
+    {
+      files: ["eslint.config.js", "*.mjs", "*.test.js"],
+      languageOptions: {
+        sourceType: "module",
       },
     },
   ];

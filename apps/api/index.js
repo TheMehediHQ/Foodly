@@ -256,7 +256,7 @@ apiRouter.get("/foods/:id", requireDb, async (req, res) => {
     }
 
     res.send(food);
-  } catch (error) {
+  } catch {
     res.status(500).send({ error: "Failed to fetch food" });
   }
 });

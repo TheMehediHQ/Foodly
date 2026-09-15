@@ -71,7 +71,7 @@ const SidebarContent = ({ collapsed, onClose }) => {
 
   useEffect(() => {
     if (onClose) onClose();
-  }, [location.pathname]);
+  }, [location.pathname, onClose]);
 
   return (
     <div className="flex flex-col h-full">

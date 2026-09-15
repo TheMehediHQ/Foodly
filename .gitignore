@@ -25,12 +25,13 @@ lerna-debug.log*
 nohup.out
 firebase-debug.log*
 
-# Editor / OS
+# Editor / OS / Tools
 .vscode/
 .idea/
 .DS_Store
 *.swp
 *.swo
+.commandcode/
 
 # Vercel / platform caches
 .vercel/

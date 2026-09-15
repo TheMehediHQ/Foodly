@@ -35,7 +35,6 @@ const formatDate = (d) =>
   d
     ? new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "—";
-const todayISO = () => new Date().toISOString().split("T")[0];
 
 const CATEGORIES = ["Dairy", "Meat", "Vegetables", "Fruits", "Snacks", "Beverages", "Other"];
 const CATEGORY_EMOJI = {

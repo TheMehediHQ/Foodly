@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
+import axiosSecure from "../api/axios";
 
 const UpdateFood = () => {
-  const foodData = useLoaderData();
+  const loaderRes = useLoaderData();
+  const foodData = loaderRes?.data?.data || loaderRes?.data || loaderRes;
 
   // Initialize state from loader data
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ const UpdateFood = () => {
   useEffect(() => {
     if (foodData) {
       setFormData({
-        foodName: foodData.foodName || "",
+        foodName: foodData.title || foodData.foodName || "",
         category: foodData.category || "",
         description: foodData.description || "",
         expiryDate: foodData.expiryDate ? foodData.expiryDate.slice(0, 10) : "",
@@ -41,11 +43,8 @@ const UpdateFood = () => {
 
     axiosSecure.put(`/foods/${foodData._id}`, formData)
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to update food");
-        return res.json();
-      })
-      .then((result) => {
-        if (result.modifiedCount) {
+        const result = res.data;
+        if (result.modifiedCount || result.ok) {
           Swal.fire({
             title: "Food Updated Successfully!",
             icon: "success",
