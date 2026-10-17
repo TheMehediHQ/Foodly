@@ -33,7 +33,7 @@ A production-ready food management application featuring real-time data synchron
 - **SweetAlert2** for user feedback
 
 ---
-#### 🚀 Live Link : https://food-garden-bd.web.app
+#### 🚀 Live Link : https://foodly.mehedi-hasan.me
 ---
 
 ### 🔑 Demo / Test Accounts (HR & Reviewers)

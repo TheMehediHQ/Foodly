@@ -17,7 +17,7 @@ CSS frontend that authenticates through Firebase.
 
 > ### 🎯 Live Demo & Test Credentials (For HR & Evaluators)
 >
-> - **Live Application:** [foodly.mehedi-hasan.me](https://foodly.mehedi-hasan.me) _(Mirror: [food-garden-bd.web.app](https://food-garden-bd.web.app))_
+> - **Live Application:** [foodly.mehedi-hasan.me](https://foodly.mehedi-hasan.me)
 > - **API Base URL:** `https://foodly.mehedi-hasan.me/api`
 >
 > | Role          | Email                   | Password          | Access / Scope                                                                               |
