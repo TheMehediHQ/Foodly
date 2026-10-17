@@ -15,8 +15,21 @@ CSS frontend that authenticates through Firebase.
 
 ---
 
+> ### 🎯 Live Demo & Test Credentials (For HR & Evaluators)
+>
+> - **Live Application:** [foodly.mehedi-hasan.me](https://foodly.mehedi-hasan.me) _(Mirror: [food-garden-bd.web.app](https://food-garden-bd.web.app))_
+> - **API Base URL:** `https://foodly.mehedi-hasan.me/api`
+>
+> | Role          | Email                   | Password          | Access / Scope                                                                               |
+> | :------------ | :---------------------- | :---------------- | :------------------------------------------------------------------------------------------- |
+> | **Admin**     | `admin@mehedi-hasan.me` | `0123456789#Pass` | Full Admin Dashboard (`/dashboard/admin`), platform statistics, food & user moderation, RBAC |
+> | **Demo User** | `demo@mehedi-hasan.me`  | `0123456789#Pass` | Standard member access, food inventory CRUD, notes management, personal dashboard            |
+
+---
+
 ## Table of contents
 
+- [Live Demo & Test Credentials](#-live-demo--test-credentials-for-hr--evaluators)
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Screenshots](#screenshots)
@@ -54,6 +67,11 @@ CSS frontend that authenticates through Firebase.
   client, backed by a JWT issued by the API.
 - **Dashboard** — protected dashboard with an overview/stats view, listing of all
   foods, your foods, and your profile.
+- **Role-Based Access Control (RBAC)** — distinct `admin` and `user` roles with
+  strict ownership enforcement and administrative moderation capabilities.
+- **Admin Dashboard** — dedicated admin portal (`/dashboard/admin`) with platform
+  metrics (total foods, registered users, category counts), user directory, and
+  food moderation.
 - **Dark mode** — a persistent dark/light theme toggle.
 - **Responsive UI** — Tailwind CSS + DaisyUI, optimized with Framer Motion and
   Swiper carousels.
@@ -66,14 +84,14 @@ CSS frontend that authenticates through Firebase.
 
 ## Tech stack
 
-| Area | Technology |
-| ---- | ---------- |
-| Runtime / package manager | [Bun](https://bun.sh) `>=1.2` (lockfile: `bun.lock`) |
-| Monorepo / build cache | [Turborepo](https://turbo.build) `^2.4` |
-| Linting | ESLint 9 (flat config, shared `@foodly/eslint-config`) |
-| Formatting | Prettier `^3.5` |
-| **API** | Express 5, MongoDB driver 6, `jsonwebtoken`, `cookie-parser`, `cors`, `dotenv` |
-| **Web** | React 19, Vite 6, Tailwind CSS 4, DaisyUI, React Router 7, Firebase 12 (Auth), Framer Motion, Swiper, Axios, date-fns, SweetAlert2, styled-components, lucide-react, react-icons |
+| Area                      | Technology                                                                                                                                                                       |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime / package manager | [Bun](https://bun.sh) `>=1.2` (lockfile: `bun.lock`)                                                                                                                             |
+| Monorepo / build cache    | [Turborepo](https://turbo.build) `^2.4`                                                                                                                                          |
+| Linting                   | ESLint 9 (flat config, shared `@foodly/eslint-config`)                                                                                                                           |
+| Formatting                | Prettier `^3.5`                                                                                                                                                                  |
+| **API**                   | Express 5, MongoDB driver 6, `jsonwebtoken`, `cookie-parser`, `cors`, `dotenv`                                                                                                   |
+| **Web**                   | React 19, Vite 6, Tailwind CSS 4, DaisyUI, React Router 7, Firebase 12 (Auth), Framer Motion, Swiper, Axios, date-fns, SweetAlert2, styled-components, lucide-react, react-icons |
 
 > Node.js `>=18` is required (the API build step runs a `node --check`).
 
@@ -160,17 +178,17 @@ cp apps/web/.env.example apps/web/.env
 
 ### API (`apps/api/.env.example`)
 
-| Variable | Required | Description |
-| -------- | -------- | ---------- |
-| `PORT` | No | Server port (default `5000`) |
-| `NODE_ENV` | No | `development` / `production` |
-| `DB_USER` | Yes | MongoDB Atlas username |
-| `DB_PASS` | Yes | MongoDB Atlas password |
-| `DB_NAME` | No | Database name (default `foodsdb`) |
-| `DB_CLUSTER` | No | Atlas cluster host (default `cluster0.onrfrlh.mongodb.net`) |
-| `JWT_SECRET` | Yes | Long random string used to sign JWTs |
-| `FRONTEND_PROD_URL` | No | Production frontend URL (reference) |
-| `FRONTEND_DEV_URL` | No | Development frontend URL (reference) |
+| Variable            | Required | Description                                                 |
+| ------------------- | -------- | ----------------------------------------------------------- |
+| `PORT`              | No       | Server port (default `5000`)                                |
+| `NODE_ENV`          | No       | `development` / `production`                                |
+| `DB_USER`           | Yes      | MongoDB Atlas username                                      |
+| `DB_PASS`           | Yes      | MongoDB Atlas password                                      |
+| `DB_NAME`           | No       | Database name (default `foodsdb`)                           |
+| `DB_CLUSTER`        | No       | Atlas cluster host (default `cluster0.onrfrlh.mongodb.net`) |
+| `JWT_SECRET`        | Yes      | Long random string used to sign JWTs                        |
+| `FRONTEND_PROD_URL` | No       | Production frontend URL (reference)                         |
+| `FRONTEND_DEV_URL`  | No       | Development frontend URL (reference)                        |
 
 > The connection string is built as
 > `mongodb+srv://<DB_USER>:<DB_PASS>@<DB_CLUSTER>/?retryWrites=true&w=majority&appName=Cluster0`.
@@ -180,16 +198,16 @@ cp apps/web/.env.example apps/web/.env
 
 ### Web (`apps/web/.env.example`)
 
-| Variable | Required | Description |
-| -------- | -------- | ---------- |
-| `VITE_API_BASE_URL` | No | Backend base URL (default `/api` — proxied to the API in dev) |
-| `VITE_FIREBASE_API_KEY` | Yes | Firebase web API key |
-| `VITE_FIREBASE_AUTH_DOMAIN` | Yes | Firebase Auth domain |
-| `VITE_FIREBASE_PROJECT_ID` | Yes | Firebase project ID |
-| `VITE_FIREBASE_STORAGE_BUCKET` | Yes | Firebase storage bucket |
-| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Yes | Firebase messaging sender ID |
-| `VITE_FIREBASE_APP_ID` | Yes | Firebase web app ID |
-| `VITE_FIREBASE_MEASUREMENT_ID` | No | Firebase measurement ID (optional, analytics) |
+| Variable                            | Required | Description                                                   |
+| ----------------------------------- | -------- | ------------------------------------------------------------- |
+| `VITE_API_BASE_URL`                 | No       | Backend base URL (default `/api` — proxied to the API in dev) |
+| `VITE_FIREBASE_API_KEY`             | Yes      | Firebase web API key                                          |
+| `VITE_FIREBASE_AUTH_DOMAIN`         | Yes      | Firebase Auth domain                                          |
+| `VITE_FIREBASE_PROJECT_ID`          | Yes      | Firebase project ID                                           |
+| `VITE_FIREBASE_STORAGE_BUCKET`      | Yes      | Firebase storage bucket                                       |
+| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Yes      | Firebase messaging sender ID                                  |
+| `VITE_FIREBASE_APP_ID`              | Yes      | Firebase web app ID                                           |
+| `VITE_FIREBASE_MEASUREMENT_ID`      | No       | Firebase measurement ID (optional, analytics)                 |
 
 > Vite exposes only environment variables prefixed with `VITE_` to the client
 > bundle. The frontend reads its API base URL from `VITE_API_BASE_URL` and the
@@ -239,24 +257,24 @@ the box.
 
 Root workspace (via Turborepo):
 
-| Command | Description |
-| ------- | ---------- |
-| `bun run dev` | Start all dev servers (API + web, in parallel) |
-| `bun run dev:web` | Start only the web dev server |
-| `bun run dev:api` | Start only the API server |
-| `bun run build` | Build all apps for production |
-| `bun run build:web` | Build only the web app |
-| `bun run lint` | Lint all apps |
-| `bun run format` | Format the whole repo with Prettier |
-| `bun run test` | Run the test suite across apps |
-| `bun run clean` | Remove build artifacts from all apps |
+| Command             | Description                                    |
+| ------------------- | ---------------------------------------------- |
+| `bun run dev`       | Start all dev servers (API + web, in parallel) |
+| `bun run dev:web`   | Start only the web dev server                  |
+| `bun run dev:api`   | Start only the API server                      |
+| `bun run build`     | Build all apps for production                  |
+| `bun run build:web` | Build only the web app                         |
+| `bun run lint`      | Lint all apps                                  |
+| `bun run format`    | Format the whole repo with Prettier            |
+| `bun run test`      | Run the test suite across apps                 |
+| `bun run clean`     | Remove build artifacts from all apps           |
 
 App-level scripts:
 
-| App | Command | Description |
-| --- | ------- | ---------- |
-| `apps/api` | `bun run dev` / `bun run start` / `bun run build` (`node --check`) / `bun run lint` / `bun run test` / `bun run clean` | |
-| `apps/web` | `bun run dev` / `bun run build` / `bun run preview` / `bun run lint` / `bun run test` / `bun run format` | |
+| App        | Command                                                                                                                | Description |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `apps/api` | `bun run dev` / `bun run start` / `bun run build` (`node --check`) / `bun run lint` / `bun run test` / `bun run clean` |             |
+| `apps/web` | `bun run dev` / `bun run build` / `bun run preview` / `bun run lint` / `bun run test` / `bun run format`               |             |
 
 ---
 
@@ -315,17 +333,20 @@ foodly/
 Base path: `/api`. All routes are defined in the single file `apps/api/index.js`
 and mounted at `app.use("/api", apiRouter)`.
 
-| Method | Endpoint | Auth | Description |
-| ------ | -------- | ---- | ----------- |
-| `GET` | `/api` (via `/` root) | ❌ | Health check — `{ ok: true, message: "Server is running." }` |
-| `POST` | `/api/jwt` | ❌ | Issue a signed JWT (2h) and set it as an httpOnly cookie |
-| `POST` | `/api/logout` | ❌ | Clear the JWT cookie |
-| `GET` | `/api/foods` | ❌ | List all food items |
-| `GET` | `/api/foods/:id` | ❌ | Get a single food item by ID |
-| `POST` | `/api/foods` | ✔️ | Create a food item (attaches `userEmail` + `addedAt` from the JWT) |
-| `PUT` | `/api/foods/:id` | ✔️ | Update a food item by ID |
-| `DELETE` | `/api/foods/:id` | ✔️ | Delete a food item by ID |
-| `POST` | `/api/foods/notes/:id` | ✔️ | Append a note to a food item |
+| Method   | Endpoint               | Auth  | Description                                                            |
+| -------- | ---------------------- | ----- | ---------------------------------------------------------------------- |
+| `GET`    | `/api` (via `/` root)  | ❌    | Health check — `{ ok: true, message: "Server is running." }`           |
+| `POST`   | `/api/jwt`             | ❌    | Issue a signed JWT (2h) and set it as an httpOnly cookie               |
+| `POST`   | `/api/logout`          | ❌    | Clear the JWT cookie                                                   |
+| `GET`    | `/api/foods`           | ❌    | List all food items                                                    |
+| `GET`    | `/api/foods/:id`       | ❌    | Get a single food item by ID                                           |
+| `POST`   | `/api/foods`           | ✔️    | Create a food item (attaches `userEmail` + `addedAt` from the JWT)     |
+| `PUT`    | `/api/foods/:id`       | ✔️    | Update a food item by ID (creator or admin only)                       |
+| `DELETE` | `/api/foods/:id`       | ✔️    | Delete a food item by ID (creator or admin only)                       |
+| `POST`   | `/api/foods/notes/:id` | ✔️    | Append a note to a food item                                           |
+| `GET`    | `/api/admin/stats`     | Admin | Retrieve platform metrics (total foods, total users, total categories) |
+| `GET`    | `/api/admin/foods`     | Admin | List all foods for moderation                                          |
+| `GET`    | `/api/admin/users`     | Admin | List all registered users and roles                                    |
 
 Responses use the envelope `{ ok: boolean, message?: string, data?: ... }`.
 Protected routes require a valid `Authorization: Bearer <jwt>` header; requests
@@ -337,10 +358,10 @@ without a valid Bearer token receive `401 Unauthorized`.
 
 ### Demo / Test Accounts
 
-| Email | Password |
-| ----- | -------- |
-| `test@mehedi-hasan.me` | `Mehedi@123` |
-| `admin@mehedi-hasan.me` | `Mehedi@123` |
+| Role          | Email                   | Password          | Access & Capabilities                                                                     |
+| :------------ | :---------------------- | :---------------- | :---------------------------------------------------------------------------------------- |
+| **Admin**     | `admin@mehedi-hasan.me` | `0123456789#Pass` | Full administrative control, RBAC moderation, Admin Dashboard (`/dashboard/admin`), stats |
+| **Demo User** | `demo@mehedi-hasan.me`  | `0123456789#Pass` | Standard member access, food inventory CRUD, notes management, personal dashboard         |
 
 - **Web (client):** Firebase Authentication — users can sign up / sign in with
   email & password, or via Google (`signInWithPopup`).

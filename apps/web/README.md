@@ -36,6 +36,15 @@ A production-ready food management application featuring real-time data synchron
 #### 🚀 Live Link : https://food-garden-bd.web.app
 ---
 
+### 🔑 Demo / Test Accounts (HR & Reviewers)
+
+| Role | Email | Password | Access |
+| :--- | :---- | :------- | :----- |
+| **Admin** | `admin@mehedi-hasan.me` | `0123456789#Pass` | Full Admin Dashboard, user & food moderation, platform stats |
+| **Demo User** | `demo@mehedi-hasan.me` | `0123456789#Pass` | Food CRUD, notes, personal dashboard |
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
