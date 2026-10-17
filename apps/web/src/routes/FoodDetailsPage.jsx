@@ -5,6 +5,7 @@ import { auth } from "../context/firebase/firebase.config";
 import Countdown from "react-countdown";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import axiosSecure from "../api/axios";
+import { useAuth } from "../context/Provider/AuthProvider";
 import Loading from "../Components/Loading";
 import {
   ArrowLeft,
@@ -20,6 +21,7 @@ import {
   Send,
   Loader2,
   Pencil,
+  Trash2,
   Info,
   Sparkles,
 } from "lucide-react";
@@ -96,6 +98,7 @@ const FoodDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, authLoading] = useAuthState(auth);
+  const { isAdmin } = useAuth();
 
   const [food, setFood] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -104,6 +107,8 @@ const FoodDetailsPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [imageError, setImageError] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -186,6 +191,26 @@ const FoodDetailsPage = () => {
     return user.email.toLowerCase() === food.userEmail.toLowerCase();
   }, [user?.email, food?.userEmail]);
 
+  // Owners and admins can manage (edit/delete) this item.
+  const canManage = isFoodCreator || isAdmin;
+
+  const handleDelete = async () => {
+    if (!food?._id) return;
+    setDeleting(true);
+    try {
+      const res = await axiosSecure.delete(`/foods/${food._id}`);
+      if (res.data?.ok) {
+        navigate("/dashboard/all-foods");
+      } else {
+        setDeleting(false);
+        setConfirmDelete(false);
+      }
+    } catch {
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
+  };
+
   if (loading || authLoading) {
     return <Loading />;
   }
@@ -231,13 +256,22 @@ const FoodDetailsPage = () => {
           Back to Overview
         </button>
 
-        {isFoodCreator && (
-          <Link
-            to={`/update-food/${food._id}`}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-[#f0e8e2] dark:border-[#2a2a2a] bg-white dark:bg-[#1c1c1c] text-xs font-semibold text-[#374151] dark:text-[#d1d5db] hover:border-[#ff6347]/40 dark:hover:border-[#ffa500]/40 hover:text-[#ff6347] dark:hover:text-[#ffa500] transition shadow-xs self-start sm:self-auto"
-          >
-            <Pencil size={13} /> Edit Item
-          </Link>
+        {canManage && (
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link
+              to={`/update-food/${food._id}`}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-[#f0e8e2] dark:border-[#2a2a2a] bg-white dark:bg-[#1c1c1c] text-xs font-semibold text-[#374151] dark:text-[#d1d5db] hover:border-[#ff6347]/40 dark:hover:border-[#ffa500]/40 hover:text-[#ff6347] dark:hover:text-[#ffa500] transition shadow-xs"
+            >
+              <Pencil size={13} /> Edit Item
+            </Link>
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(true)}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-red-200 dark:border-red-900 bg-white dark:bg-[#1c1c1c] text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition shadow-xs"
+            >
+              <Trash2 size={13} /> Delete
+            </button>
+          </div>
         )}
       </Motion.div>
 
@@ -489,6 +523,68 @@ const FoodDetailsPage = () => {
         </Motion.div>
 
       </div>
+
+      {/* ── Delete Confirmation ── */}
+      <AnimatePresence>
+        {confirmDelete && (
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => !deleting && setConfirmDelete(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+          >
+            <Motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1c1c1c] border border-[#f0e8e2] dark:border-[#2a2a2a] p-6 shadow-xl space-y-4"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-950/50 text-red-500 flex items-center justify-center shrink-0">
+                  <Trash2 size={18} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-[#111827] dark:text-[#e5e7eb]">
+                    Delete this item?
+                  </h3>
+                  <p className="text-xs text-[#6b7280] dark:text-[#9ca3af]">
+                    <strong className="text-[#111827] dark:text-[#e5e7eb]">{food.title}</strong> will
+                    be permanently removed. This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(false)}
+                  disabled={deleting}
+                  className="px-3.5 py-2 rounded-xl border border-[#f0e8e2] dark:border-[#2a2a2a] bg-white dark:bg-[#202020] text-xs font-semibold text-[#374151] dark:text-[#d1d5db] hover:border-[#9ca3af] transition disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white text-xs font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {deleting ? (
+                    <>
+                      <Loader2 size={13} className="animate-spin" /> Deleting…
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 size={13} /> Delete
+                    </>
+                  )}
+                </button>
+              </div>
+            </Motion.div>
+          </Motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
